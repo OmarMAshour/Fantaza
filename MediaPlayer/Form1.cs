@@ -114,7 +114,7 @@ namespace MediaPlayer
             }
 
             //generate repeat same sound
-            else if (iwp.PlaybackState == PlaybackState.Stopped && Repeat == true && Shuffle==false)
+            else if (iwp.PlaybackState == PlaybackState.Stopped && Repeat == true )
             {
                 listBox1.SelectedIndex = listBox1.SelectedIndex;
                 iwp.Stop();
@@ -331,9 +331,8 @@ namespace MediaPlayer
         */
 
             iwp.Stop();
-            waveformPainter1.Visible = false;
             waveformPainter1.Visible = true;
-            
+            waveformPainter2.Visible = true;
             waveformPainter1.Controls.Clear();
             waveformPainter2.Controls.Clear();
             string newSoundName = listBox1.GetItemText(listBox1.SelectedItem);

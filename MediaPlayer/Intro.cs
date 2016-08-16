@@ -20,7 +20,7 @@ namespace MediaPlayer
             InitializeComponent();
             //     Thread.Sleep(5);
             timer = new Timer();
-            timer.Interval = 4000;
+            timer.Interval = 1800;
             timer.Tick += Timer_Tick;
             timer.Start();
 
