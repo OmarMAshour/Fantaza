@@ -40,19 +40,30 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.NextBox = new System.Windows.Forms.PictureBox();
             this.CoverPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.BandBar7 = new System.Windows.Forms.TrackBar();
+            this.BandBar8 = new System.Windows.Forms.TrackBar();
+            this.BandBar5 = new System.Windows.Forms.TrackBar();
+            this.BandBar4 = new System.Windows.Forms.TrackBar();
+            this.BandBar6 = new System.Windows.Forms.TrackBar();
+            this.BandBar3 = new System.Windows.Forms.TrackBar();
+            this.BandBar2 = new System.Windows.Forms.TrackBar();
+            this.BandBar1 = new System.Windows.Forms.TrackBar();
+            this.waveformPainter2 = new NAudio.Gui.WaveformPainter();
+            this.waveformPainter1 = new NAudio.Gui.WaveformPainter();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mediaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeSelectedSongToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.jumpToSpecificTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playPauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.equalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +86,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NextBox)).BeginInit();
             this.CoverPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -210,6 +230,9 @@
             // CoverPanel
             // 
             this.CoverPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.CoverPanel.Controls.Add(this.panel1);
+            this.CoverPanel.Controls.Add(this.waveformPainter2);
+            this.CoverPanel.Controls.Add(this.waveformPainter1);
             this.CoverPanel.Controls.Add(this.pictureBox4);
             this.CoverPanel.Controls.Add(this.menuStrip1);
             this.CoverPanel.Controls.Add(this.trackBar1);
@@ -217,6 +240,139 @@
             this.CoverPanel.Name = "CoverPanel";
             this.CoverPanel.Size = new System.Drawing.Size(573, 527);
             this.CoverPanel.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(124)))), ((int)(((byte)(0)))));
+            this.panel1.Controls.Add(this.BandBar7);
+            this.panel1.Controls.Add(this.BandBar8);
+            this.panel1.Controls.Add(this.BandBar5);
+            this.panel1.Controls.Add(this.BandBar4);
+            this.panel1.Controls.Add(this.BandBar6);
+            this.panel1.Controls.Add(this.BandBar3);
+            this.panel1.Controls.Add(this.BandBar2);
+            this.panel1.Controls.Add(this.BandBar1);
+            this.panel1.Location = new System.Drawing.Point(0, 22);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(572, 464);
+            this.panel1.TabIndex = 4;
+            this.panel1.Visible = false;
+            // 
+            // BandBar7
+            // 
+            this.BandBar7.LargeChange = 1;
+            this.BandBar7.Location = new System.Drawing.Point(432, 58);
+            this.BandBar7.Maximum = 30;
+            this.BandBar7.Minimum = -30;
+            this.BandBar7.Name = "BandBar7";
+            this.BandBar7.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar7.Size = new System.Drawing.Size(45, 300);
+            this.BandBar7.TabIndex = 23;
+            this.BandBar7.Scroll += new System.EventHandler(this.BandBar7_Scroll_1);
+            // 
+            // BandBar8
+            // 
+            this.BandBar8.LargeChange = 1;
+            this.BandBar8.Location = new System.Drawing.Point(292, 58);
+            this.BandBar8.Maximum = 30;
+            this.BandBar8.Minimum = -30;
+            this.BandBar8.Name = "BandBar8";
+            this.BandBar8.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar8.Size = new System.Drawing.Size(45, 300);
+            this.BandBar8.TabIndex = 22;
+            this.BandBar8.Scroll += new System.EventHandler(this.BandBar8_Scroll_1);
+            // 
+            // BandBar5
+            // 
+            this.BandBar5.LargeChange = 1;
+            this.BandBar5.Location = new System.Drawing.Point(498, 58);
+            this.BandBar5.Maximum = 30;
+            this.BandBar5.Minimum = -30;
+            this.BandBar5.Name = "BandBar5";
+            this.BandBar5.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar5.Size = new System.Drawing.Size(45, 300);
+            this.BandBar5.TabIndex = 21;
+            this.BandBar5.Scroll += new System.EventHandler(this.BandBar5_Scroll_1);
+            // 
+            // BandBar4
+            // 
+            this.BandBar4.LargeChange = 1;
+            this.BandBar4.Location = new System.Drawing.Point(359, 58);
+            this.BandBar4.Maximum = 30;
+            this.BandBar4.Minimum = -30;
+            this.BandBar4.Name = "BandBar4";
+            this.BandBar4.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar4.Size = new System.Drawing.Size(45, 300);
+            this.BandBar4.TabIndex = 20;
+            this.BandBar4.Scroll += new System.EventHandler(this.BandBar4_Scroll_1);
+            // 
+            // BandBar6
+            // 
+            this.BandBar6.LargeChange = 1;
+            this.BandBar6.Location = new System.Drawing.Point(150, 58);
+            this.BandBar6.Maximum = 30;
+            this.BandBar6.Minimum = -30;
+            this.BandBar6.Name = "BandBar6";
+            this.BandBar6.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar6.Size = new System.Drawing.Size(45, 300);
+            this.BandBar6.TabIndex = 19;
+            this.BandBar6.Scroll += new System.EventHandler(this.BandBar6_Scroll_1);
+            // 
+            // BandBar3
+            // 
+            this.BandBar3.LargeChange = 1;
+            this.BandBar3.Location = new System.Drawing.Point(222, 58);
+            this.BandBar3.Maximum = 30;
+            this.BandBar3.Minimum = -30;
+            this.BandBar3.Name = "BandBar3";
+            this.BandBar3.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar3.Size = new System.Drawing.Size(45, 300);
+            this.BandBar3.TabIndex = 18;
+            this.BandBar3.Scroll += new System.EventHandler(this.BandBar3_Scroll_1);
+            // 
+            // BandBar2
+            // 
+            this.BandBar2.LargeChange = 1;
+            this.BandBar2.Location = new System.Drawing.Point(84, 58);
+            this.BandBar2.Maximum = 30;
+            this.BandBar2.Minimum = -30;
+            this.BandBar2.Name = "BandBar2";
+            this.BandBar2.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar2.Size = new System.Drawing.Size(45, 300);
+            this.BandBar2.TabIndex = 17;
+            this.BandBar2.Scroll += new System.EventHandler(this.BandBar2_Scroll_1);
+            // 
+            // BandBar1
+            // 
+            this.BandBar1.LargeChange = 1;
+            this.BandBar1.Location = new System.Drawing.Point(23, 58);
+            this.BandBar1.Maximum = 30;
+            this.BandBar1.Minimum = -30;
+            this.BandBar1.Name = "BandBar1";
+            this.BandBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.BandBar1.Size = new System.Drawing.Size(45, 300);
+            this.BandBar1.TabIndex = 16;
+            this.BandBar1.Scroll += new System.EventHandler(this.BandBar1_Scroll);
+            // 
+            // waveformPainter2
+            // 
+            this.waveformPainter2.BackColor = System.Drawing.Color.White;
+            this.waveformPainter2.ForeColor = System.Drawing.Color.DeepPink;
+            this.waveformPainter2.Location = new System.Drawing.Point(222, 315);
+            this.waveformPainter2.Name = "waveformPainter2";
+            this.waveformPainter2.Size = new System.Drawing.Size(351, 73);
+            this.waveformPainter2.TabIndex = 3;
+            this.waveformPainter2.Text = "waveformPainter2";
+            // 
+            // waveformPainter1
+            // 
+            this.waveformPainter1.BackColor = System.Drawing.Color.White;
+            this.waveformPainter1.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.waveformPainter1.Location = new System.Drawing.Point(258, 149);
+            this.waveformPainter1.Name = "waveformPainter1";
+            this.waveformPainter1.Size = new System.Drawing.Size(313, 69);
+            this.waveformPainter1.TabIndex = 2;
+            this.waveformPainter1.Text = "waveformPainter1";
             // 
             // pictureBox4
             // 
@@ -234,6 +390,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mediaToolStripMenuItem,
             this.playbackToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -247,7 +404,6 @@
             this.mediaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFileToolStripMenuItem,
             this.removeSelectedSongToolStripMenuItem,
-            this.toolStripMenuItem2,
             this.quitToolStripMenuItem});
             this.mediaToolStripMenuItem.Name = "mediaToolStripMenuItem";
             this.mediaToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
@@ -256,37 +412,27 @@
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // removeSelectedSongToolStripMenuItem
             // 
             this.removeSelectedSongToolStripMenuItem.Name = "removeSelectedSongToolStripMenuItem";
-            this.removeSelectedSongToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.removeSelectedSongToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.removeSelectedSongToolStripMenuItem.Text = "Remove Selected File";
             this.removeSelectedSongToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedSongToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Checked = true;
-            this.toolStripMenuItem2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(207, 22);
-            this.toolStripMenuItem2.Text = "Quit at the end of Playlist";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // playbackToolStripMenuItem
             // 
             this.playbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.jumpToSpecificTimeToolStripMenuItem,
             this.playPauseToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.nextToolStripMenuItem,
@@ -294,13 +440,6 @@
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
             this.playbackToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.playbackToolStripMenuItem.Text = "Playback";
-            // 
-            // jumpToSpecificTimeToolStripMenuItem
-            // 
-            this.jumpToSpecificTimeToolStripMenuItem.Name = "jumpToSpecificTimeToolStripMenuItem";
-            this.jumpToSpecificTimeToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.jumpToSpecificTimeToolStripMenuItem.Text = "Jump to Specific Time";
-            this.jumpToSpecificTimeToolStripMenuItem.Click += new System.EventHandler(this.jumpToSpecificTimeToolStripMenuItem_Click);
             // 
             // playPauseToolStripMenuItem
             // 
@@ -329,6 +468,21 @@
             this.previousToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.previousToolStripMenuItem.Text = "Previous";
             this.previousToolStripMenuItem.Click += new System.EventHandler(this.previousToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.equalizationToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // equalizationToolStripMenuItem
+            // 
+            this.equalizationToolStripMenuItem.Name = "equalizationToolStripMenuItem";
+            this.equalizationToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.equalizationToolStripMenuItem.Text = "Equalization";
+            this.equalizationToolStripMenuItem.Click += new System.EventHandler(this.equalizationToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -463,12 +617,12 @@
             // 
             this.trackBar2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(30)))), ((int)(((byte)(27)))));
             this.trackBar2.Location = new System.Drawing.Point(452, 374);
-            this.trackBar2.Maximum = 100;
+            this.trackBar2.Maximum = 40;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBar2.Size = new System.Drawing.Size(45, 212);
             this.trackBar2.TabIndex = 2;
-            this.trackBar2.Value = 50;
+            this.trackBar2.Value = 20;
             this.trackBar2.Visible = false;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
@@ -490,7 +644,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "                                                                                 " +
     "                       FaNtAzA --- Fantaz Nafsk ---";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -502,6 +657,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.NextBox)).EndInit();
             this.CoverPanel.ResumeLayout(false);
             this.CoverPanel.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BandBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -535,11 +700,9 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mediaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playbackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem jumpToSpecificTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playPauseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nextToolStripMenuItem;
@@ -555,6 +718,19 @@
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.ToolStripMenuItem removeSelectedSongToolStripMenuItem;
+        private NAudio.Gui.WaveformPainter waveformPainter2;
+        private NAudio.Gui.WaveformPainter waveformPainter1;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem equalizationToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TrackBar BandBar7;
+        private System.Windows.Forms.TrackBar BandBar8;
+        private System.Windows.Forms.TrackBar BandBar5;
+        private System.Windows.Forms.TrackBar BandBar4;
+        private System.Windows.Forms.TrackBar BandBar6;
+        private System.Windows.Forms.TrackBar BandBar3;
+        private System.Windows.Forms.TrackBar BandBar2;
+        private System.Windows.Forms.TrackBar BandBar1;
     }
 }
 

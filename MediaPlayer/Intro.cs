@@ -13,7 +13,7 @@ namespace MediaPlayer
     {
         private Timer timer;
         Form1 Fantaza = new Form1();
-
+      //  Form2 Equalization = new Form2();
 
         public Intro()
         {
