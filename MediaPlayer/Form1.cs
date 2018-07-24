@@ -490,12 +490,7 @@ namespace MediaPlayer
             {
                 foreach (String file in dialog.FileNames)
                 {
-                    string path = file;
-                    Sound[i] = new SoundFile();
-                    Sound[i].Path = path;
-                    Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
-                    listBox1.Items.Add(Sound[i].Name);
-                    i++;
+                    addToPlaylist(file);
                 }
             }
         }
@@ -533,6 +528,27 @@ namespace MediaPlayer
                     break;
                 }
             }
+        }
+
+        private void listBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+                addToPlaylist(file);
+        }
+
+        private void addToPlaylist(String file) {
+            string path = file;
+            Sound[i] = new SoundFile();
+            Sound[i].Path = path;
+            Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
+            listBox1.Items.Add(Sound[i].Name);
+            i++;
+        }
+
+        private void listBox1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
         }
     }
 }

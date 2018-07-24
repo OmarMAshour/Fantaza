@@ -55,6 +55,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mediaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeSelectedSongToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,7 +78,6 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RepeatBox)).BeginInit();
@@ -414,6 +414,13 @@
             this.openFileToolStripMenuItem.Text = "Open File...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
+            // addFileToolStripMenuItem
+            // 
+            this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.addFileToolStripMenuItem.Text = "Add File...";
+            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
+            // 
             // removeSelectedSongToolStripMenuItem
             // 
             this.removeSelectedSongToolStripMenuItem.Name = "removeSelectedSongToolStripMenuItem";
@@ -583,6 +590,7 @@
             // 
             // listBox1
             // 
+            this.listBox1.AllowDrop = true;
             this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(30)))), ((int)(((byte)(27)))));
             this.listBox1.ForeColor = System.Drawing.SystemColors.Info;
             this.listBox1.FormattingEnabled = true;
@@ -590,6 +598,8 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(197, 459);
             this.listBox1.TabIndex = 1;
+            this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBox1_DragDrop);
+            this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // pictureBox2
@@ -619,13 +629,6 @@
             this.trackBar2.Value = 20;
             this.trackBar2.Visible = false;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
-            // 
-            // addFileToolStripMenuItem
-            // 
-            this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.addFileToolStripMenuItem.Text = "Add File...";
-            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // Form1
             // 
