@@ -197,6 +197,7 @@ namespace MediaPlayer
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+                iwp.Stop();
                 listBox1.Items.Clear();
                 foreach (String file in dialog.FileNames)
                 {
@@ -208,6 +209,7 @@ namespace MediaPlayer
                     i++;
                 }
                 listBox1.SelectedIndex = 0;
+                playSelected();
             }
         }
 
@@ -220,28 +222,6 @@ namespace MediaPlayer
             trackBar1.Value = 1;
             this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
 
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            iwp.Stop();
-            string newSoundName = listBox1.GetItemText(listBox1.SelectedItem);
-            foreach (SoundFile s in Sound)
-            {
-                if (s != null && newSoundName == s.Name)
-                {
-                    iwp = new WaveOutEvent();
-                    currentFilePath = s.Path;
-                    sampleProvider = CreateInputStream(s.Path);
-
-                    songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
-                    songEqualizerHandler.SongEqualizer = songEqualizer;
-
-                    iwp.Init(songEqualizer);
-                    iwp.Play();
-                    break;
-                }
-            }
         }
 
         private ISampleProvider CreateInputStream(string fileName)
@@ -266,33 +246,6 @@ namespace MediaPlayer
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
-        }
-
-        private void listBox1_SelectedValueChanged(object sender, EventArgs e)
-        {
-            iwp.Stop();
-            waveformPainter1.Visible = true;
-            waveformPainter2.Visible = true;
-            waveformPainter1.Controls.Clear();
-            waveformPainter2.Controls.Clear();
-            string newSoundName = listBox1.GetItemText(listBox1.SelectedItem);
-            foreach (SoundFile s in Sound)
-            {
-                if (s != null && newSoundName == s.Name)
-                {
-                    iwp = new WaveOutEvent();
-                    currentFilePath = s.Path;
-
-                    sampleProvider = CreateInputStream(s.Path);
-
-                    songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
-                    songEqualizerHandler.SongEqualizer = songEqualizer;
-
-                    iwp.Init(songEqualizer);
-                    iwp.Play();
-                    break;
-                }
-            }
         }
 
 
@@ -423,7 +376,6 @@ namespace MediaPlayer
 
         private void removeSelectedSongToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            iwp.Stop();
             listBox1.Items.Remove(listBox1.SelectedItem);
         }
 
@@ -544,6 +496,41 @@ namespace MediaPlayer
                     Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
                     listBox1.Items.Add(Sound[i].Name);
                     i++;
+                }
+            }
+        }
+
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int index = this.listBox1.IndexFromPoint(e.Location);
+            if (index != System.Windows.Forms.ListBox.NoMatches)
+            {
+                playSelected();
+            }
+        }
+
+        private void playSelected() {
+            iwp.Stop();
+            waveformPainter1.Visible = true;
+            waveformPainter2.Visible = true;
+            waveformPainter1.Controls.Clear();
+            waveformPainter2.Controls.Clear();
+            string newSoundName = listBox1.GetItemText(listBox1.SelectedItem);
+            foreach (SoundFile s in Sound)
+            {
+                if (s != null && newSoundName == s.Name)
+                {
+                    iwp = new WaveOutEvent();
+                    currentFilePath = s.Path;
+
+                    sampleProvider = CreateInputStream(s.Path);
+
+                    songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
+                    songEqualizerHandler.SongEqualizer = songEqualizer;
+
+                    iwp.Init(songEqualizer);
+                    iwp.Play();
+                    break;
                 }
             }
         }
