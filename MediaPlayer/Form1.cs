@@ -140,6 +140,10 @@ namespace MediaPlayer
                     }
                 }
             }
+            else if (iwp.PlaybackState == PlaybackState.Stopped && !Repeat && listBox1.Items.Count != 0 )
+            {
+                listBox1.SelectedIndex = 0;
+            }
             else
             {
                 //continue normally to the next sound
