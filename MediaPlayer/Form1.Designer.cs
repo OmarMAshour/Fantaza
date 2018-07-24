@@ -77,6 +77,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RepeatBox)).BeginInit();
@@ -120,7 +121,6 @@
             this.ButtonPanel.Name = "ButtonPanel";
             this.ButtonPanel.Size = new System.Drawing.Size(573, 162);
             this.ButtonPanel.TabIndex = 0;
-            this.ButtonPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ButtonPanel_Paint);
             // 
             // pictureBox3
             // 
@@ -143,7 +143,6 @@
             this.CurrentTimeLbl.Size = new System.Drawing.Size(52, 25);
             this.CurrentTimeLbl.TabIndex = 8;
             this.CurrentTimeLbl.Text = "00:00";
-            this.CurrentTimeLbl.Click += new System.EventHandler(this.CurrentTimeLbl_Click);
             // 
             // TotalTimeLbl
             // 
@@ -382,7 +381,6 @@
             this.pictureBox4.Size = new System.Drawing.Size(572, 464);
             this.pictureBox4.TabIndex = 1;
             this.pictureBox4.TabStop = false;
-            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
             // 
             // menuStrip1
             // 
@@ -397,12 +395,12 @@
             this.menuStrip1.Size = new System.Drawing.Size(573, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // mediaToolStripMenuItem
             // 
             this.mediaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFileToolStripMenuItem,
+            this.addFileToolStripMenuItem,
             this.removeSelectedSongToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.mediaToolStripMenuItem.Name = "mediaToolStripMenuItem";
@@ -413,7 +411,7 @@
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
             this.openFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.openFileToolStripMenuItem.Text = "Open File";
+            this.openFileToolStripMenuItem.Text = "Open File...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // removeSelectedSongToolStripMenuItem
@@ -444,28 +442,28 @@
             // playPauseToolStripMenuItem
             // 
             this.playPauseToolStripMenuItem.Name = "playPauseToolStripMenuItem";
-            this.playPauseToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.playPauseToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.playPauseToolStripMenuItem.Text = "Play/Pause";
             this.playPauseToolStripMenuItem.Click += new System.EventHandler(this.playPauseToolStripMenuItem_Click);
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // nextToolStripMenuItem
             // 
             this.nextToolStripMenuItem.Name = "nextToolStripMenuItem";
-            this.nextToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.nextToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.nextToolStripMenuItem.Text = "Next";
             this.nextToolStripMenuItem.Click += new System.EventHandler(this.nextToolStripMenuItem_Click);
             // 
             // previousToolStripMenuItem
             // 
             this.previousToolStripMenuItem.Name = "previousToolStripMenuItem";
-            this.previousToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.previousToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.previousToolStripMenuItem.Text = "Previous";
             this.previousToolStripMenuItem.Click += new System.EventHandler(this.previousToolStripMenuItem_Click);
             // 
@@ -544,7 +542,6 @@
             this.AlbumName.TabIndex = 2;
             this.AlbumName.Text = "Album Name";
             this.AlbumName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.AlbumName.Click += new System.EventHandler(this.label1_Click);
             // 
             // SongName
             // 
@@ -559,7 +556,6 @@
             this.SongName.TabIndex = 1;
             this.SongName.Text = "Song Name";
             this.SongName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SongName.Click += new System.EventHandler(this.SongName_Click);
             // 
             // Artist
             // 
@@ -584,7 +580,6 @@
             this.PlayListPanel.Name = "PlayListPanel";
             this.PlayListPanel.Size = new System.Drawing.Size(212, 504);
             this.PlayListPanel.TabIndex = 3;
-            this.PlayListPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.PlayListPanel_Paint);
             // 
             // listBox1
             // 
@@ -626,6 +621,13 @@
             this.trackBar2.Visible = false;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
+            // addFileToolStripMenuItem
+            // 
+            this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.addFileToolStripMenuItem.Text = "Add File...";
+            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -644,7 +646,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "                                                                                 " +
     "                       FaNtAzA --- Fantaz Nafsk ---";
-            this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ButtonPanel.ResumeLayout(false);
             this.ButtonPanel.PerformLayout();
@@ -731,6 +732,7 @@
         private System.Windows.Forms.TrackBar BandBar3;
         private System.Windows.Forms.TrackBar BandBar2;
         private System.Windows.Forms.TrackBar BandBar1;
+        private System.Windows.Forms.ToolStripMenuItem addFileToolStripMenuItem;
     }
 }
 
