@@ -68,6 +68,10 @@ namespace MediaPlayer
 
                 TagLib.File tagFile = TagLib.File.Create(currentFilePath);
                 Artist.Text = tagFile.Tag.FirstAlbumArtist;
+                if (tagFile.Tag.FirstAlbumArtist == null)
+                {
+                    Artist.Text = tagFile.Tag.FirstPerformer;
+                }
                 AlbumName.Text = tagFile.Tag.Album;
                 SongName.Text = tagFile.Tag.Title;
 
@@ -504,7 +508,8 @@ namespace MediaPlayer
             }
         }
 
-        private void playSelected() {
+        private void playSelected()
+        {
             iwp.Stop();
             waveformPainter1.Visible = true;
             waveformPainter2.Visible = true;
@@ -537,13 +542,29 @@ namespace MediaPlayer
                 addToPlaylist(file);
         }
 
-        private void addToPlaylist(String file) {
+        private void addToPlaylist(String file)
+        {
             string path = file;
-            Sound[i] = new SoundFile();
-            Sound[i].Path = path;
-            Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
-            listBox1.Items.Add(Sound[i].Name);
-            i++;
+            Boolean alreadyInPlaylist = false;
+            foreach (SoundFile s in Sound)
+            {
+                if (s != null)
+                {
+                    if (s.Path == path)
+                    {
+                        alreadyInPlaylist = true;
+                    }
+                }
+
+            }
+            if (alreadyInPlaylist == false)
+            {
+                Sound[i] = new SoundFile();
+                Sound[i].Path = path;
+                Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
+                listBox1.Items.Add(Sound[i].Name);
+                i++;
+            }
         }
 
         private void listBox1_DragEnter(object sender, DragEventArgs e)
