@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
-using System.Media;
-using System.Windows.Controls;
-using WMPLib;
-using IEXTagLib;
-using NAudio;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
@@ -41,6 +31,8 @@ namespace MediaPlayer
         private SoundFile[] Sound = new SoundFile[50];
         private int i = 0;
         private string currentFilePath;
+        Boolean stop = false;
+        Boolean paused = true;
 
 
         public Form1()
@@ -62,116 +54,48 @@ namespace MediaPlayer
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+
             //set time view
             if (iwp.PlaybackState == PlaybackState.Playing)
             {
-
-                TagLib.File tagFile = TagLib.File.Create(currentFilePath);
-                Artist.Text = tagFile.Tag.FirstAlbumArtist;
-                if (tagFile.Tag.FirstAlbumArtist == null)
-                {
-                    Artist.Text = tagFile.Tag.FirstPerformer;
-                }
-                AlbumName.Text = tagFile.Tag.Album;
-                SongName.Text = tagFile.Tag.Title;
-
-                TotalTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.TotalTime.TotalMinutes, (int)afr.TotalTime.Seconds);
                 CurrentTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.CurrentTime.TotalMinutes, (int)afr.CurrentTime.Seconds);
-
-                trackBar1.Minimum = 0;
-                trackBar1.Maximum = (int)afr.TotalTime.TotalSeconds + 1;
                 trackBar1.Value = (int)afr.CurrentTime.TotalSeconds;
             }
 
-            //generate Shuffle
-            if (iwp.PlaybackState == PlaybackState.Stopped && Shuffle == true && Repeat == false)
-            {
-                // listBox1.SelectedIndex = Rand.Next(listBox1.Items.Count);
 
-                int i = Rand.Next(listBox1.Items.Count);
-                while (i == listBox1.SelectedIndex)
+            if (stop == false)
+            {
+                //generate Shuffle
+                if (iwp.PlaybackState == PlaybackState.Stopped && Shuffle == true && Repeat == false)
                 {
-                    i = Rand.Next(listBox1.Items.Count);
-                }
-                listBox1.SelectedIndex = i;
-                iwp.Stop();
-                string NewSoundName = listBox1.GetItemText(listBox1.SelectedItem);
-                foreach (SoundFile S in Sound)
-                {
-                    if (S != null && NewSoundName == S.Name)
+                    int i = Rand.Next(listBox1.Items.Count);
+                    while (i == listBox1.SelectedIndex)
                     {
-                        iwp = new WaveOutEvent();
-
-                        currentFilePath = S.Path;
-                        sampleProvider = CreateInputStream(S.Path);
-
-                        songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
-                        songEqualizerHandler.SongEqualizer = songEqualizer;
-
-                        iwp.Init(songEqualizer);
-                        iwp.Play();
-
-                        break;
-
+                        i = Rand.Next(listBox1.Items.Count);
                     }
+                    listBox1.SelectedIndex = i;
+                    PlaySelected();
                 }
-            }
-
-            //generate repeat same sound
-            else if (iwp.PlaybackState == PlaybackState.Stopped && Repeat == true)
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex;
-                iwp.Stop();
-                string NewSoundName = listBox1.GetItemText(listBox1.SelectedItem);
-                foreach (SoundFile S in Sound)
+                //generate repeat same sound
+                else if (iwp.PlaybackState == PlaybackState.Stopped && Repeat == true)
                 {
-                    if (S != null && NewSoundName == S.Name)
-                    {
-                        iwp = new WaveOutEvent();
-                        currentFilePath = S.Path;
-
-                        sampleProvider = CreateInputStream(S.Path);
-                        songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
-                        songEqualizerHandler.SongEqualizer = songEqualizer;
-
-                        iwp.Init(songEqualizer);
-                        iwp.Play();
-                        break;
-                    }
+                    listBox1.SelectedIndex = listBox1.SelectedIndex;
+                    PlaySelected();
                 }
-            }
-            else if (iwp.PlaybackState == PlaybackState.Stopped && !Repeat && listBox1.Items.Count != 0 )
-            {
-                listBox1.SelectedIndex = 0;
-            }
-            else
-            {
+                else if (iwp.PlaybackState == PlaybackState.Stopped && !Repeat && !Shuffle && listBox1.Items.Count != 0 && listBox1.SelectedIndex == listBox1.Items.Count - 1)
+                {
+                    listBox1.SelectedIndex = 0;
+                    StopPlaying();
+                }
+
                 //continue normally to the next sound
-                if (listBox1.SelectedIndex + 1 < listBox1.Items.Count && iwp.PlaybackState == PlaybackState.Stopped && !Repeat && !Shuffle)
+                else if (!stop && listBox1.SelectedIndex + 1 < listBox1.Items.Count && iwp.PlaybackState == PlaybackState.Stopped && !Repeat && !Shuffle)
                 {
-
                     listBox1.SelectedIndex++;
-                    iwp.Stop();
-                    string NewSoundName = listBox1.GetItemText(listBox1.SelectedItem);
-                    foreach (SoundFile S in Sound)
-                    {
-                        if (S != null && NewSoundName == S.Name)
-                        {
-
-                            iwp = new WaveOutEvent();
-                            currentFilePath = S.Path;
-                            sampleProvider = CreateInputStream(S.Path);
-
-                            songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
-                            songEqualizerHandler.SongEqualizer = songEqualizer;
-
-                            iwp.Init(songEqualizer);
-                            iwp.Play();
-                            break;
-                        }
-                    }
+                    PlaySelected();
                 }
             }
+
 
             //set time label  and track bar  if stop is pressed
             if (iwp.PlaybackState == PlaybackState.Stopped)
@@ -190,10 +114,7 @@ namespace MediaPlayer
         // return to the previous song
         private void BackBox_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex > 0)
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
-            }
+            PreviousSong();
         }
 
         // choosing file from the fileDialogue
@@ -217,19 +138,14 @@ namespace MediaPlayer
                     i++;
                 }
                 listBox1.SelectedIndex = 0;
-                playSelected();
+                PlaySelected();
             }
         }
 
 
         private void StopBox_Click(object sender, EventArgs e)
         {
-            afr.CurrentTime = TimeSpan.FromSeconds(1.0);
-            iwp.Pause();
-            CurrentTimeLbl.Text = "00:00";
-            trackBar1.Value = 1;
-            this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
-
+            StopPlaying();
         }
 
         private ISampleProvider CreateInputStream(string fileName)
@@ -253,16 +169,13 @@ namespace MediaPlayer
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            Application.Exit();
         }
 
 
         private void NextBox_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
-            }
+            NextSong();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -290,19 +203,7 @@ namespace MediaPlayer
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            if (iwp.PlaybackState == PlaybackState.Playing)
-            {
-                iwp.Pause();
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
-
-            }
-            else if (iwp.PlaybackState == PlaybackState.Paused)
-            {
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Pause;
-
-                iwp.Play();
-            }
-
+            PlayPause();
         }
 
         private void RepeatBox_Click(object sender, EventArgs e)
@@ -341,40 +242,22 @@ namespace MediaPlayer
 
         private void playPauseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (iwp.PlaybackState == PlaybackState.Playing)
-            {
-                iwp.Pause();
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
-
-            }
-            else if (iwp.PlaybackState == PlaybackState.Paused)
-            {
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Pause;
-
-                iwp.Play();
-            }
+            PlayPause();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            iwp.Stop();
+            StopPlaying();
         }
 
         private void nextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
-            }
+            NextSong();
         }
 
         private void previousToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex > 0)
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
-            }
+            PreviousSong();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -485,7 +368,7 @@ namespace MediaPlayer
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Environment.Exit(0);
+            Application.Exit();
         }
 
         private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -508,21 +391,19 @@ namespace MediaPlayer
             int index = this.listBox1.IndexFromPoint(e.Location);
             if (index != System.Windows.Forms.ListBox.NoMatches)
             {
-                playSelected();
+                PlaySelected();
             }
         }
 
-        private void playSelected()
+        private void PlaySelected()
         {
             iwp.Stop();
-            waveformPainter1.Visible = true;
-            waveformPainter2.Visible = true;
             waveformPainter1.Controls.Clear();
             waveformPainter2.Controls.Clear();
-            string newSoundName = listBox1.GetItemText(listBox1.SelectedItem);
+            string selectedSoundItem = listBox1.GetItemText(listBox1.SelectedItem);
             foreach (SoundFile s in Sound)
             {
-                if (s != null && newSoundName == s.Name)
+                if (s != null && selectedSoundItem == s.Name)
                 {
                     iwp = new WaveOutEvent();
                     currentFilePath = s.Path;
@@ -534,6 +415,7 @@ namespace MediaPlayer
 
                     iwp.Init(songEqualizer);
                     iwp.Play();
+                    LoadSong();
                     break;
                 }
             }
@@ -563,8 +445,10 @@ namespace MediaPlayer
             }
             if (alreadyInPlaylist == false)
             {
-                Sound[i] = new SoundFile();
-                Sound[i].Path = path;
+                Sound[i] = new SoundFile
+                {
+                    Path = path
+                };
                 Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
                 listBox1.Items.Add(Sound[i].Name);
                 i++;
@@ -574,6 +458,104 @@ namespace MediaPlayer
         private void listBox1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void LoadSong()
+        {
+            stop = false;
+            TagLib.File tagFile = TagLib.File.Create(currentFilePath);
+
+            // load album/song artist
+            Artist.Text = tagFile.Tag.FirstAlbumArtist;
+            if (tagFile.Tag.FirstAlbumArtist == null)
+            {
+                Artist.Text = tagFile.Tag.FirstPerformer;
+            }
+
+            // load album & song name
+            AlbumName.Text = tagFile.Tag.Album;
+            SongName.Text = tagFile.Tag.Title;
+
+            // load album cover/art if found
+            if (tagFile.Tag.Pictures.Length >= 1)
+            {
+                waveformPainter1.Hide();
+                waveformPainter2.Hide();
+
+                var bin = (byte[])(tagFile.Tag.Pictures[0].Data.Data);
+                pictureBox4.Image = Image.FromStream(new MemoryStream(bin)).GetThumbnailImage(573, 573, null, IntPtr.Zero);
+            }
+            else
+            {
+                pictureBox4.Image = Properties.Resources.Fantaza2;
+                waveformPainter1.Show();
+                waveformPainter2.Show();
+            }
+
+            // load song duration
+            TotalTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.TotalTime.TotalMinutes, (int)afr.TotalTime.Seconds);
+            CurrentTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.CurrentTime.TotalMinutes, (int)afr.CurrentTime.Seconds);
+            trackBar1.Minimum = 0;
+            trackBar1.Maximum = (int)afr.TotalTime.TotalSeconds + 1;
+            trackBar1.Value = (int)afr.CurrentTime.TotalSeconds;
+        }
+
+        private void StopPlaying()
+        {
+            paused = false;
+            iwp.Stop();
+            stop = true;
+            afr.CurrentTime = TimeSpan.FromSeconds(0.0);
+            this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
+            pictureBox4.Image = Properties.Resources.Fantaza2;
+        }
+
+        private void PlayPause() {
+            if (iwp.PlaybackState == PlaybackState.Playing)
+            {
+                iwp.Pause();
+                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
+                paused = true;
+            }
+            else
+            {
+                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Pause;
+
+                if (paused)
+                {
+                    LoadSong();
+                    iwp.Play();
+                }
+                else
+                {
+                    PlaySelected();
+                }
+
+            }
+        }
+
+        private void NextSong() {
+            if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
+            {
+                listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
+            }
+            else
+            {
+                listBox1.SelectedIndex = 0;
+            }
+            PlaySelected();
+        }
+
+        private void PreviousSong() {
+            if (listBox1.SelectedIndex == 0)
+            {
+                listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            }
+            else
+            {
+                listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
+            }
+            PlaySelected();
         }
     }
 }

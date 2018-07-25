@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NAudio;
-using NAudio.Wave;
-using System.ComponentModel;
 
 namespace MediaPlayer
 {
@@ -13,7 +6,6 @@ namespace MediaPlayer
     {
         
         Equal equalizer;
-        private string selectedFile;
          EqualizerBand[] bands;
 
         public EqualizerHandler()
