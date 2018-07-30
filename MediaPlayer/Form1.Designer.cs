@@ -265,6 +265,7 @@
             this.AlbumName.TabIndex = 2;
             this.AlbumName.Text = "Album Name";
             this.AlbumName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AlbumName.UseCompatibleTextRendering = true;
             // 
             // SongName
             // 
@@ -279,6 +280,7 @@
             this.SongName.TabIndex = 1;
             this.SongName.Text = "Song Name";
             this.SongName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SongName.UseCompatibleTextRendering = true;
             // 
             // Artist
             // 
@@ -293,6 +295,7 @@
             this.Artist.TabIndex = 0;
             this.Artist.Text = "Artist";
             this.Artist.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Artist.UseCompatibleTextRendering = true;
             // 
             // PlayListPanel
             // 
@@ -317,6 +320,7 @@
             this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBox1_DragDrop);
             this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
+            this.listBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDown);
             // 
             // pictureBox2
             // 

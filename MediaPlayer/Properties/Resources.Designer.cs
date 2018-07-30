@@ -19,7 +19,7 @@ namespace MediaPlayer.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -31,7 +31,9 @@ namespace MediaPlayer.Properties {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
+        public static object Digireu { get; internal set; }
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -77,6 +79,16 @@ namespace MediaPlayer.Properties {
             get {
                 object obj = ResourceManager.GetObject("Fantaza2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] good_times_rg {
+            get {
+                object obj = ResourceManager.GetObject("good_times_rg", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -167,6 +179,16 @@ namespace MediaPlayer.Properties {
             get {
                 object obj = ResourceManager.GetObject("Shuffle selected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] still_time {
+            get {
+                object obj = ResourceManager.GetObject("still_time", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

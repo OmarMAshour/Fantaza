@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
@@ -25,7 +27,7 @@ namespace MediaPlayer
 
 
 
-        private Timer timer; //i know it starts with capital
+        private Timer timer;
 
         private Random Rand;
         private SoundFile[] Sound = new SoundFile[50];
@@ -34,11 +36,15 @@ namespace MediaPlayer
         Boolean stop = false;
         Boolean paused = true;
 
+        PrivateFontCollection pfc = new PrivateFontCollection();
+
 
         public Form1()
         {
-
             InitializeComponent();
+
+            // Load custom fonts
+            UseCustomFont();
 
             iwp = new WaveOutEvent();
 
@@ -128,6 +134,7 @@ namespace MediaPlayer
             {
                 iwp.Stop();
                 listBox1.Items.Clear();
+                i = 0;
                 foreach (String file in dialog.FileNames)
                 {
                     string path = file;
@@ -466,10 +473,17 @@ namespace MediaPlayer
             TagLib.File tagFile = TagLib.File.Create(currentFilePath);
 
             // load album/song artist
-            Artist.Text = tagFile.Tag.FirstAlbumArtist;
-            if (tagFile.Tag.FirstAlbumArtist == null)
+            if (tagFile.Tag.FirstAlbumArtist != null)
+            {
+                Artist.Text = tagFile.Tag.FirstAlbumArtist;
+            }
+            else if (tagFile.Tag.FirstPerformer != null)
             {
                 Artist.Text = tagFile.Tag.FirstPerformer;
+            }
+            else
+            {
+                Artist.Text = "";
             }
 
             // load album & song name
@@ -510,7 +524,8 @@ namespace MediaPlayer
             pictureBox4.Image = Properties.Resources.Fantaza2;
         }
 
-        private void PlayPause() {
+        private void PlayPause()
+        {
             if (iwp.PlaybackState == PlaybackState.Playing)
             {
                 iwp.Pause();
@@ -534,7 +549,8 @@ namespace MediaPlayer
             }
         }
 
-        private void NextSong() {
+        private void NextSong()
+        {
             if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
             {
                 listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
@@ -546,7 +562,8 @@ namespace MediaPlayer
             PlaySelected();
         }
 
-        private void PreviousSong() {
+        private void PreviousSong()
+        {
             if (listBox1.SelectedIndex == 0)
             {
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;
@@ -556,6 +573,60 @@ namespace MediaPlayer
                 listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
             }
             PlaySelected();
+        }
+
+        void UseCustomFont()
+        {
+            UseSongNameCostumFont();
+
+            //Select font from the resources.
+            int fontLength = Properties.Resources.good_times_rg.Length;
+
+            // create a buffer to read in to
+            byte[] fontdata = Properties.Resources.good_times_rg;
+
+            // create an unsafe memory block for the font data
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+
+            // copy the bytes to the unsafe memory block
+            Marshal.Copy(fontdata, 0, data, fontLength);
+
+            // pass the font to the font collection
+            pfc.AddMemoryFont(data, fontLength);
+
+            Artist.Font = new Font(pfc.Families[0], 12);
+            AlbumName.Font = new Font(pfc.Families[0], 12);
+        }
+
+        private void UseSongNameCostumFont()
+        {
+            //Select font from the resources.
+            int fontLength = Properties.Resources.still_time.Length;
+
+            // create a buffer to read in to
+            byte[] fontdata = Properties.Resources.still_time;
+
+            // create an unsafe memory block for the font data
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+
+            // copy the bytes to the unsafe memory block
+            Marshal.Copy(fontdata, 0, data, fontLength);
+
+            // pass the font to the font collection
+            pfc.AddMemoryFont(data, fontLength);
+
+            SongName.Font = new Font(pfc.Families[0], 22);
+        }
+
+        private void listBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) {
+                int index = this.listBox1.IndexFromPoint(e.Location);
+                if (index != ListBox.NoMatches)
+                {
+                    //listBox1.Items[index];
+                }
+            }
         }
     }
 }
