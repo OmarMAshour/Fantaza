@@ -70,8 +70,15 @@ namespace MediaPlayer
             //set time view
             if (iwp.PlaybackState == PlaybackState.Playing)
             {
-                CurrentTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.CurrentTime.TotalMinutes, (int)afr.CurrentTime.Seconds);
-                trackBar1.Value = (int)afr.CurrentTime.TotalSeconds;
+                if ((int)afr.CurrentTime.TotalSeconds > trackBar1.Maximum)
+                {
+                    NextSong();
+                }
+                else
+                {
+                    CurrentTimeLbl.Text = String.Format("{0:00}:{1:00}", (int)afr.CurrentTime.TotalMinutes, (int)afr.CurrentTime.Seconds);
+                    trackBar1.Value = (int)afr.CurrentTime.TotalSeconds;
+                }
             }
 
 
@@ -199,11 +206,7 @@ namespace MediaPlayer
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            if (iwp.PlaybackState == PlaybackState.Playing)
-            {
                 afr.CurrentTime = TimeSpan.FromSeconds((double)trackBar1.Value);
-            }
-            else trackBar1.Value = 1;
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -608,7 +611,8 @@ namespace MediaPlayer
                     }
                     PlaySelected();
                 }
-                else {
+                else
+                {
                     i -= 2;
                     PlayShuffled();
                 }
