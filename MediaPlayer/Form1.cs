@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -30,11 +31,13 @@ namespace MediaPlayer
         private Timer timer;
 
         private Random Rand;
-        private SoundFile[] Sound = new SoundFile[50];
-        private int i = 0;
+        //private SoundFile[] Sound = new SoundFile[50];
+        IList<SoundFile> Sound = new List<SoundFile>();
         private string currentFilePath;
         Boolean stop = false;
         Boolean paused = true;
+        Boolean RightSelected = false;
+        String playingSong;
 
         PrivateFontCollection pfc = new PrivateFontCollection();
 
@@ -134,15 +137,15 @@ namespace MediaPlayer
             {
                 iwp.Stop();
                 listBox1.Items.Clear();
-                i = 0;
+                Sound.Clear();
                 foreach (String file in dialog.FileNames)
                 {
                     string path = file;
-                    Sound[i] = new SoundFile();
-                    Sound[i].Path = path;
-                    Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
-                    listBox1.Items.Add(Sound[i].Name);
-                    i++;
+                    SoundFile tempSound = new SoundFile();
+                    tempSound.Path = path;
+                    tempSound.Name = System.IO.Path.GetFileNameWithoutExtension(tempSound.Path);
+                    Sound.Add(tempSound);
+                    listBox1.Items.Add(tempSound.Name);
                 }
                 listBox1.SelectedIndex = 0;
                 PlaySelected();
@@ -274,7 +277,7 @@ namespace MediaPlayer
 
         private void removeSelectedSongToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            listBox1.Items.Remove(listBox1.SelectedItem);
+            RemoveSong();
         }
 
         private void equalizationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -410,8 +413,9 @@ namespace MediaPlayer
             string selectedSoundItem = listBox1.GetItemText(listBox1.SelectedItem);
             foreach (SoundFile s in Sound)
             {
-                if (s != null && selectedSoundItem == s.Name)
+                if (selectedSoundItem == s.Name)
                 {
+                    playingSong = s.Name;
                     iwp = new WaveOutEvent();
                     currentFilePath = s.Path;
 
@@ -441,24 +445,21 @@ namespace MediaPlayer
             Boolean alreadyInPlaylist = false;
             foreach (SoundFile s in Sound)
             {
-                if (s != null)
-                {
                     if (s.Path == path)
                     {
                         alreadyInPlaylist = true;
                     }
-                }
 
             }
             if (alreadyInPlaylist == false)
             {
-                Sound[i] = new SoundFile
+                SoundFile tempSound = new SoundFile
                 {
                     Path = path
                 };
-                Sound[i].Name = System.IO.Path.GetFileNameWithoutExtension(Sound[i].Path);
-                listBox1.Items.Add(Sound[i].Name);
-                i++;
+                tempSound.Name = System.IO.Path.GetFileNameWithoutExtension(tempSound.Path);
+                Sound.Add(tempSound);
+                listBox1.Items.Add(tempSound.Name);
             }
         }
 
@@ -620,11 +621,84 @@ namespace MediaPlayer
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right) {
+            if (e.Button == MouseButtons.Right)
+            {
                 int index = this.listBox1.IndexFromPoint(e.Location);
                 if (index != ListBox.NoMatches)
                 {
-                    //listBox1.Items[index];
+                    listBox1.SelectedIndex = index;
+                    RightSelected = true;
+                }
+            }
+            else
+            {
+                RightSelected = false;
+            }
+        }
+
+        private void contextMenuStrip2_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!RightSelected)
+                e.Cancel = true;
+        }
+
+        private void playToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PlaySelected();
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        { // byfta7 lw already opened
+            // msh bywa2af lw 7asal remove
+            // shuffle generate array of random numbers 3shan ymshy 3laeha bel tarteeb
+            RemoveSong();
+        }
+
+        private void RemoveSong()
+        {
+            // if removed the song that is currently playing
+            if (listBox1.GetItemText(listBox1.SelectedItem) == playingSong)
+            {
+                int index = listBox1.SelectedIndex;
+                Sound.Remove(listBox1.SelectedItem as SoundFile);
+                listBox1.Items.Remove(listBox1.SelectedItem);
+                if (index == listBox1.Items.Count)
+                    index = index - 1;
+                listBox1.SelectedIndex = index;
+                
+                // check if playing or paused
+                if (iwp.PlaybackState == PlaybackState.Playing)
+                    PlaySelected();
+                else {
+                    loadPaused();
+                }
+            }
+            else
+            {
+                Sound.Remove(listBox1.SelectedItem as SoundFile);
+                listBox1.Items.Remove(listBox1.SelectedItem);
+            }
+        }
+
+        private void loadPaused() {
+            string selectedSoundItem = listBox1.GetItemText(listBox1.SelectedItem);
+            foreach (SoundFile s in Sound)
+            {
+                if (selectedSoundItem == s.Name)
+                {
+                    playingSong = s.Name;
+                    iwp = new WaveOutEvent();
+                    currentFilePath = s.Path;
+
+                    sampleProvider = CreateInputStream(s.Path);
+
+                    songEqualizer = new Equal(sampleProvider, songEqualizerHandler.Bands);
+                    songEqualizerHandler.SongEqualizer = songEqualizer;
+
+                    iwp.Init(songEqualizer);
+                    LoadSong();
+                    stop = true;
+                    break;
                 }
             }
         }
