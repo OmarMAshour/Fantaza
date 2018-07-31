@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using NAudio.Wave;
@@ -31,13 +33,14 @@ namespace MediaPlayer
         private Timer timer;
 
         private Random Rand;
-        //private SoundFile[] Sound = new SoundFile[50];
-        IList<SoundFile> Sound = new List<SoundFile>();
+        List<SoundFile> shuffledSounds = new List<SoundFile>();
+        List<SoundFile> Sound = new List<SoundFile>();
         private string currentFilePath;
         Boolean stop = false;
         Boolean paused = true;
         Boolean RightSelected = false;
-        String playingSong;
+        SoundFile playingSong;
+        int i = 0;
 
         PrivateFontCollection pfc = new PrivateFontCollection();
 
@@ -77,13 +80,10 @@ namespace MediaPlayer
                 //generate Shuffle
                 if (iwp.PlaybackState == PlaybackState.Stopped && Shuffle == true && Repeat == false)
                 {
-                    int i = Rand.Next(listBox1.Items.Count);
-                    while (i == listBox1.SelectedIndex)
+                    if (Sound.Count != 0)
                     {
-                        i = Rand.Next(listBox1.Items.Count);
+                        PlayShuffled();
                     }
-                    listBox1.SelectedIndex = i;
-                    PlaySelected();
                 }
                 //generate repeat same sound
                 else if (iwp.PlaybackState == PlaybackState.Stopped && Repeat == true)
@@ -147,8 +147,17 @@ namespace MediaPlayer
                     Sound.Add(tempSound);
                     listBox1.Items.Add(tempSound.Name);
                 }
-                listBox1.SelectedIndex = 0;
-                PlaySelected();
+                if (Shuffle)
+                {
+                    i = 0;
+                    CreateShuffledList();
+                    PlayShuffled();
+                }
+                else
+                {
+                    listBox1.SelectedIndex = 0;
+                    PlaySelected();
+                }
             }
         }
 
@@ -208,6 +217,8 @@ namespace MediaPlayer
             {
                 Shuffle = true;
                 this.pictureBox1.Image = global::MediaPlayer.Properties.Resources.Shuffle_selected;
+                i = 1;
+                CreateShuffledList();
             }
         }
 
@@ -402,6 +413,7 @@ namespace MediaPlayer
             if (index != System.Windows.Forms.ListBox.NoMatches)
             {
                 PlaySelected();
+                if (Shuffle) { CreateShuffledList(); }
             }
         }
 
@@ -415,7 +427,7 @@ namespace MediaPlayer
             {
                 if (selectedSoundItem == s.Name)
                 {
-                    playingSong = s.Name;
+                    playingSong = s;
                     iwp = new WaveOutEvent();
                     currentFilePath = s.Path;
 
@@ -445,10 +457,10 @@ namespace MediaPlayer
             Boolean alreadyInPlaylist = false;
             foreach (SoundFile s in Sound)
             {
-                    if (s.Path == path)
-                    {
-                        alreadyInPlaylist = true;
-                    }
+                if (s.Path == path)
+                {
+                    alreadyInPlaylist = true;
+                }
 
             }
             if (alreadyInPlaylist == false)
@@ -459,6 +471,7 @@ namespace MediaPlayer
                 };
                 tempSound.Name = System.IO.Path.GetFileNameWithoutExtension(tempSound.Path);
                 Sound.Add(tempSound);
+                if (Shuffle) { shuffledSounds.Add(tempSound); }
                 listBox1.Items.Add(tempSound.Name);
             }
         }
@@ -517,63 +530,89 @@ namespace MediaPlayer
 
         private void StopPlaying()
         {
-            paused = false;
-            iwp.Stop();
-            stop = true;
-            afr.CurrentTime = TimeSpan.FromSeconds(0.0);
-            this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
-            pictureBox4.Image = Properties.Resources.Fantaza2;
+            if (Sound.Count != 0)
+            {
+                paused = false;
+                iwp.Stop();
+                stop = true;
+                afr.CurrentTime = TimeSpan.FromSeconds(0.0);
+                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
+                pictureBox4.Image = Properties.Resources.Fantaza2;
+            }
         }
 
         private void PlayPause()
         {
-            if (iwp.PlaybackState == PlaybackState.Playing)
+            if (Sound.Count != 0)
             {
-                iwp.Pause();
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
-                paused = true;
-            }
-            else
-            {
-                this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Pause;
-
-                if (paused)
+                if (iwp.PlaybackState == PlaybackState.Playing)
                 {
-                    LoadSong();
-                    iwp.Play();
+                    iwp.Pause();
+                    this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Play;
+                    paused = true;
                 }
                 else
                 {
-                    PlaySelected();
-                }
+                    this.pictureBox3.Image = global::MediaPlayer.Properties.Resources.Pause;
 
+                    if (paused)
+                    {
+                        LoadSong();
+                        iwp.Play();
+                    }
+                    else
+                    {
+                        PlaySelected();
+                    }
+
+                }
             }
         }
 
         private void NextSong()
         {
-            if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
+            if (Sound.Count != 0)
             {
-                listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
+                if (!Shuffle)
+                {
+                    if (listBox1.SelectedIndex + 1 != listBox1.Items.Count)
+                    {
+                        listBox1.SelectedIndex = listBox1.SelectedIndex + 1;
+                    }
+                    else
+                    {
+                        listBox1.SelectedIndex = 0;
+                    }
+                    PlaySelected();
+                }
+                else
+                {
+                    PlayShuffled();
+                }
             }
-            else
-            {
-                listBox1.SelectedIndex = 0;
-            }
-            PlaySelected();
         }
 
         private void PreviousSong()
         {
-            if (listBox1.SelectedIndex == 0)
+            if (Sound.Count != 0)
             {
-                listBox1.SelectedIndex = listBox1.Items.Count - 1;
+                if (!Shuffle)
+                {
+                    if (listBox1.SelectedIndex == 0)
+                    {
+                        listBox1.SelectedIndex = listBox1.Items.Count - 1;
+                    }
+                    else
+                    {
+                        listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
+                    }
+                    PlaySelected();
+                }
+                else {
+                    i -= 2;
+                    PlayShuffled();
+                }
             }
-            else
-            {
-                listBox1.SelectedIndex = listBox1.SelectedIndex - 1;
-            }
-            PlaySelected();
         }
 
         void UseCustomFont()
@@ -648,16 +687,14 @@ namespace MediaPlayer
         }
 
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
-        { // byfta7 lw already opened
-            // msh bywa2af lw 7asal remove
-            // shuffle generate array of random numbers 3shan ymshy 3laeha bel tarteeb
+        {
             RemoveSong();
         }
 
         private void RemoveSong()
         {
             // if removed the song that is currently playing
-            if (listBox1.GetItemText(listBox1.SelectedItem) == playingSong)
+            if (listBox1.GetItemText(listBox1.SelectedItem) == playingSong.Name)
             {
                 int index = listBox1.SelectedIndex;
                 Sound.Remove(listBox1.SelectedItem as SoundFile);
@@ -665,11 +702,12 @@ namespace MediaPlayer
                 if (index == listBox1.Items.Count)
                     index = index - 1;
                 listBox1.SelectedIndex = index;
-                
+
                 // check if playing or paused
                 if (iwp.PlaybackState == PlaybackState.Playing)
                     PlaySelected();
-                else {
+                else
+                {
                     loadPaused();
                 }
             }
@@ -680,13 +718,14 @@ namespace MediaPlayer
             }
         }
 
-        private void loadPaused() {
+        private void loadPaused()
+        {
             string selectedSoundItem = listBox1.GetItemText(listBox1.SelectedItem);
             foreach (SoundFile s in Sound)
             {
                 if (selectedSoundItem == s.Name)
                 {
-                    playingSong = s.Name;
+                    playingSong = s;
                     iwp = new WaveOutEvent();
                     currentFilePath = s.Path;
 
@@ -700,6 +739,48 @@ namespace MediaPlayer
                     stop = true;
                     break;
                 }
+            }
+        }
+
+        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                RemoveSong();
+            }
+            if (e.KeyCode == Keys.Space)
+            {
+                PlayPause();
+            }
+        }
+
+        private void CreateShuffledList()
+        {
+            shuffledSounds = new List<SoundFile>();
+            List<SoundFile> templist = new List<SoundFile>();
+            templist = Sound.OrderBy(a => Guid.NewGuid()).ToList();
+            if (playingSong != null)
+            {
+                shuffledSounds.Add(playingSong);
+                shuffledSounds.AddRange(templist);
+                shuffledSounds.RemoveAt(shuffledSounds.FindLastIndex(x => x.Equals(playingSong)));
+            }
+            else { shuffledSounds.AddRange(templist); }
+        }
+
+        private void PlayShuffled()
+        {
+            if (i != shuffledSounds.Count)
+            {
+                String t = shuffledSounds[i].Name;
+                int index = listBox1.FindString(t);
+                listBox1.SelectedIndex = index;
+                PlaySelected();
+                i++;
+            }
+            else
+            { // hna na2es eno ybda2 mn awl el playlist tany on playing again
+                StopPlaying();
             }
         }
     }
