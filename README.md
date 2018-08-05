@@ -3,12 +3,12 @@
 
 Advanced MP3/WAV music player that supports features like:
 
-- all controls (previous song, next song, play, pause, stop, shuffle, repeat, volume).
-- showing the artist, album, song names and the music file cover/album art if found.
-- waveforms.
-- open new playlist or add/remove to/from the current.
-- drag and drop to add to playlist.
-- equalizer. 
+- All controls (previous song, next song, play, pause, stop, shuffle, repeat, volume).
+- Showing the artist, album, song names and the music file cover/album art if found.
+- Waveforms.
+- Open new playlist or add/remove to/from the current.
+- Drag and drop to add to playlist.
+- Equalizer.
 
 ![](https://imgur.com/KdJ2psN.png)
 
